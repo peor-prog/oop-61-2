@@ -1,27 +1,27 @@
 class Product:
-    def _init_(self, name, price):
+    def __init__(self, name, price):
         self.name = name
         self._price = price
         self.__discount = 0
-    def get_price(self):
 
-        final_price = self.price * (1 - self._discount / 100)
+    def get_price(self):
+        final_price = self._price * (1 - self.__discount / 100)
         return final_price
 
     def set_discount(self, percent):
-
         if percent <= 50:
             self.__discount = percent
         else:
             return "Ошибка: скидка не может быть больше 50%"
 
     def apply_extra_discount(self, secret_code):
-
         if secret_code == "VIP123":
             current_price = self.get_price()
-            self._price = current_price * 0.95  # Уменьшаем на 5%
+            self._price = current_price * 0.95
         else:
             print("Неверный код")
+
+
 print("=== Проверка класса Product ===")
 p = Product("Iphone", 1000)
 
@@ -34,8 +34,9 @@ print("Цена после VIP:", p.get_price())
 p.apply_extra_discount("wrong")
 print("Цена итоговая:", p.get_price())
 
-print()
+
 from abc import ABC, abstractmethod
+
 class PaymentMethod(ABC):
     @abstractmethod
     def pay(self, amount):
@@ -63,20 +64,11 @@ class CashPayment(PaymentMethod):
 
 class CryptoPayment(PaymentMethod):
     def pay(self, amount):
-        result = {
-            "type": "crypto",
-            "amount": amount,
-            "currency": "USDT"
-        }
-        print(result)
+        print({"type": "crypto", "amount": amount, "currency": "USDT"})
 
     def refund(self, amount):
-        result = {
-            "type": "crypto_refund",
-            "amount": amount,
-            "currency": "USDT"
-        }
-        print(result)
+        print({"type": "crypto_refund", "amount": amount, "currency": "USDT"})
+
 
 class PaymentProcessor:
     def _init_(self, payment_method):

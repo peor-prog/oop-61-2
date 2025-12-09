@@ -1,6 +1,3 @@
-from abc import ABC
-
-
 class Hero:
     def __init__(self, name, lvl, hp):
         self.name = name
@@ -8,7 +5,7 @@ class Hero:
         self.hp = hp
 
     def action(self):
-        print(f"{self.name} готов к бою!")
+        return self.name + " готов к бою!"
 
 class MageHero(Hero):
     def __init__(self, name, lvl, hp, mp):
@@ -16,54 +13,115 @@ class MageHero(Hero):
         self.mp = mp
 
     def action(self):
-        print(f"Маг {self.name} кастует заклинание! MP: {self.mp}")
+        return "Маг " + self.name + " кастует заклинание! MP: " + str(self.mp)
 
 class WarriorHero(MageHero):
-    def __init__(self, name, lvl, hp, mp, ):
-        self.name = name
-        self.lvl = lvl
-        self.hp = hp
-        self.mp = mp
-
+    def __init__(self, name, lvl, hp, rage):
+        super().__init__(name, lvl, hp, 0)
+        self.rage = rage
 
     def action(self):
-        print(f"Воин {self.name} рубит мечом! Уровень: {self.lvl}")
-
-
+        return "Воин " + self.name + " рубит мечом! Уровень: " + str(self.lvl)
 
 class BankAccount:
-    def __init__(self, hero, bank_name, balance, password):
+    bank_name = "Simba"
+
+    def __init__(self, hero, balance, password, bank_name=None):
         self.hero = hero
-        self.bank_name = bank_name
         self._balance = balance
-        self.__password = password
+        self.__pass = password
+        if bank_name:
+            BankAccount.bank_name = bank_name
 
-    def login(self, password):
-        return self.__password == password
+    def login(self, p):
+        return p == self.__pass
+
+    @property
     def full_info(self):
-        return (f"Герой: {self.hero.name} (Уровень {self.hero.lvl}), "
-                f"Банк: {self.bank_name}, Баланс: {self._balance}")
+        return self.hero.name + " lvl " + str(self.hero.lvl) + " | " + str(self._balance)
 
-    def get_bank_name(self):
-        return self.bank_name
+    @classmethod
+    def get_bank_name(cls):
+        return cls.bank_name
 
-    def bonus_for_level(self):
-        return self.hero.lvl * 10
+    @staticmethod
+    def bonus_for_level():
+        return 500
 
-    def __str__(self):
-        return f"{self.hero.name} | Баланс: {self._balance} SOM"
+    def _str_(self):
+        return self.hero.name + " | Баланс: " + str(self._balance) + " SOM"
 
-    def __add__(self, other):
-        if isinstance(self.hero, self.hero.__class__) and isinstance(other.hero, self.hero.__class__):
-            new_balance = self._balance + other._balance
-            return BankAccount(self.hero, self.bank_name, new_balance, "temp_pass")
+    def _add_(self, other):
+        if type(self.hero) == type(other.hero):
+            return self._balance + other._balance
         else:
-            raise TypeError("Сложение балансов возможно только между героями одного типа!")
+            return "Ошибка: Нельзя сложить счета героев разных классов!"
 
-    def __eq__(self, other):
-        if isinstance(other, BankAccount):
-            return self.hero.name == other.hero.name and self.hero.lvl == other.hero.lvl
-        return False
+    def _eq_(self, other):
+        return self.hero.name == other.hero.name and self.hero.lvl == other.hero.lvl
+
+class SmsService:
+    def send_otp(self, phone):
+        pass
+
+class KGSms(SmsService):
+    def send_otp(self, phone):
+        return "<text>Код: 1234</text><phone>" + phone + "</phone>"
+
+class RUSms(SmsService):
+    def send_otp(self, phone):
+        return {"text": "Код: 1234", "phone": phone}
+
+mage1 = MageHero("Merlin", 80, 500, 150)
+mage2 = MageHero("Merlin", 80, 500, 200)
+war = WarriorHero("Conan", 50, 900, 20)
+
+a1 = BankAccount(mage1, 5000, "1234", "Simba")
+a2 = BankAccount(mage2, 3000, "0000", "Simba")
+a3 = BankAccount(war, 2500, "1111", "Simba")
+
+print(mage1.action())
+print(war.action())
+
+print(a1)
+print(a2)
+
+print("Банк:", a1.get_bank_name())
+print("Бонус за уровень:", a1.bonus_for_level(), "SOM")
+
+print("\n=== Проверка __add__ ===")
+print("Сумма счетов двух магов:", a1 + a2)
+print("Сумма мага и воина:", a1 + a3)
+
+sms = KGSms()
+print("\n", sms.send_otp("+996777123456"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
