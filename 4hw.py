@@ -1,24 +1,29 @@
 class Product:
-    def _init_(self, title, price, quantity):
+    def __init__(self, title, price, quantity):
         self.title = title
         self.price = price
         self.quantity = quantity
 
-    def _str_(self):
+    def __str__(self):
         return self.title + " = " + str(self.price) + "р (" + str(self.quantity) + ")"
 
-    def _repr_(self):
-        return "Product(" + self.title + ", " + str(self.price) + ", " + str(self.quantity) + ")"
+    def __repr__(self):
+        return 'Product("' + self.title + '", ' + str(self.price) + ", " + str(self.quantity) + ")"
 
-    def _eq_(self, other):
-        if self.title == other.title:
-            return True
-        else:
-            return False
+    def __eq__(self, other):
+        return self.title == other.title
 
-    def _lt_(self, other):
+    def __lt__(self, other):
         return self.price < other.price
 
-    def _add_(self, other):
-        combo_price = self.price + other.price
-        return Product("Combo", combo_price, 1)
+    def __add__(self, other):
+        return Product("Combo", self.price + other.price, 1)
+
+
+p1 = Product("Клавиатура", 1500, 10)
+p2 = Product("Клавиатура", 1800, 5)
+p3 = Product("Мышка", 700, 20)
+
+print(p1 == p2)
+print(p3 < p1)
+print(p1 + p3)
