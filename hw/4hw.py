@@ -1,46 +1,29 @@
-data_tuple = ('h', 6.13, 'C', 'e', 'T', True, 'k', 'e', 3, 'e', 1, 'g')
+class Product:
+    def __init__(self, title, price, quantity):
+        self.title = title
+        self.price = price
+        self.quantity = quantity
+
+    def __str__(self):
+        return self.title + " = " + str(self.price) + "р (" + str(self.quantity) + ")"
+
+    def __repr__(self):
+        return 'Product("' + self.title + '", ' + str(self.price) + ", " + str(self.quantity) + ")"
+
+    def __eq__(self, other):
+        return self.title == other.title
+
+    def __lt__(self, other):
+        return self.price < other.price
+
+    def __add__(self, other):
+        return Product("Combo", self.price + other.price, 1)
 
 
-letters = []
-numbers = []
+p1 = Product("Клавиатура", 1500, 10)
+p2 = Product("Клавиатура", 1800, 5)
+p3 = Product("Мышка", 700, 20)
 
-
-for item in data_tuple:
-
-    if type(item) == str:
-        letters.append(item)
-    else:
-        numbers.append(item)
-
-
-numbers.remove(6.13)
-true_value = numbers.pop(1)
-letters.append(true_value)
-
-
-numbers.insert(1, 2)
-
-
-numbers.sort()
-
-
-letters.reverse()
-
-
-for i in range(len(letters)):
-    if letters[i] == 'C':
-        letters[i] = 'c'
-    elif letters[i] == 'h':
-        letters[i] = 'H'
-
-
-for i in range(len(numbers)):
-    numbers[i] = numbers[i] ** 2
-
-
-letters = tuple(letters)
-numbers = tuple(numbers)
-
-
-print("letters:", letters)
-print("numbers:", numbers)
+print(p1 == p2)
+print(p3 < p1)
+print(p1 + p3)
